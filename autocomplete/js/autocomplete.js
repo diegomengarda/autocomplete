@@ -9,7 +9,7 @@
 		factory(jQuery);
 	}
 }(function ($) {
-	'use strict';
+	'use strict'; 
 	
 	var defaults = {
 		'url' 			: '',	
