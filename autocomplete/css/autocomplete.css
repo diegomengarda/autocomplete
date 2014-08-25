@@ -1,0 +1,41 @@
+body {
+	margin:0;
+	padding:0;
+}
+.fn_autocomplete {
+	display:none;
+	position: absolute;
+	height:auto;
+	overflow:auto;
+}
+.fn_autocomplete, .fn_autocomplete * {
+    -webkit-box-sizing	: border-box;
+    -moz-box-sizing		: border-box;
+    -ms-box-sizing		: border-box;
+    -o-box-sizing		: border-box;
+    box-sizing			: border-box;
+}
+.fn_autocomplete > ul {
+	width:100%;
+	margin:0;
+	padding:0;
+	list-style-type:none;
+	background: #FEFEFE;
+	display: block;
+	border: 1px solid #999;
+	overflow: auto;
+}
+.fn_autocomplete > ul li {
+	width:100%;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#000;
+	margin: 0; 
+	text-align: left;
+	padding: .3em .5em;
+	border: none;
+}
+.fn_autocomplete > ul li:hover {
+	cursor: pointer;
+	background: #B4D5FE;
+}
