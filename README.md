@@ -120,7 +120,7 @@ options: String ('POST', 'GET')
 Armanzenar retornos iguais no javascript
 ```
 default: false
-options: Boleano (true, false')
+options: Boleano (true, false)
 ```
 
 ###Retornos (Callbacks)
