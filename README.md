@@ -33,7 +33,7 @@ $(function(){
 	$('.autocomplete').autocomplete({		
 		url : 'ajax.php',
 		onSelectItem : function(elemento, dados){
-		  elemento.val(dados[0]);
+		  	elemento.val(dados[0]);
 			elemento.data('uf', dados[1]);
 		}		
 	});
@@ -124,7 +124,7 @@ options: Boleano (true, false')
 ###Retornos (Callbacks)
 
 **onSelectItem**
-Ação ao seleciona um ítem da lista de sugestões
+Ação ao selecionar um ítem da lista de sugestões
 ```
 default: function(){}
 options: function(elemento, dados){ // seu código aqui }
