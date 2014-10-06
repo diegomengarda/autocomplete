@@ -16,9 +16,9 @@ Lançado sob a licença MIT - http://opensource.org/licenses/MIT
 ```html
 <!-- Biblioteca jQuery (jQuery CDN) -->
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-<!-- bxSlider Javascript file -->
+<!-- autocomplete Javascript -->
 <script src="autocomplete/js/autocomplete-min.js"></script>
-<!-- bxSlider CSS file -->
+<!-- autocomplete CSS -->
 <link href="autocomplete/css/autocomplete.css" rel="stylesheet" />
 ```
 
