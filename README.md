@@ -1,7 +1,5 @@
-#Autocomplete 1.0
+#Autocomplete 1.1
 ##Plugin em jQuery de auto-sugestões para campos de texto
-
-
 
 ###Autor
 Diego Mengarda / <a href="http://www.twitter.com/diegomengarda">@diegomengarda</a>
@@ -19,7 +17,7 @@ Lançado sob a licença MIT - http://opensource.org/licenses/MIT
 <!-- autocomplete Javascript -->
 <script src="autocomplete/js/autocomplete-min.js"></script>
 <!-- autocomplete CSS -->
-<link href="autocomplete/css/autocomplete.css" rel="stylesheet" />
+<link href="autocomplete/css/autocomplete-min.css" rel="stylesheet" />
 ```
 
 ###Passo 2: A marcação HTML
@@ -35,8 +33,8 @@ $(function(){
 	$('.autocomplete').autocomplete({		
 		url : 'ajax.php',
 		onSelectItem : function(elemento, dados){
-		  	elemento.val(dados[0]);
-			elemento.data('uf', dados[1]);
+		  	elemento.attr('data-idcidade', dados.idcidade);
+        elemento.attr('data-uf', dados.uf);
 		}		
 	});
 });
@@ -46,20 +44,41 @@ $(function(){
 
 ```javascript
 [
-  [
-    "Porto Alegre",
-    [
-      20,
-      "RS"
-    ]
-  ],
-  [
-    "Uruguaiana",
-    [
-      89,
-      "RS"
-    ]
-  ]
+  {
+    "item": "Porto Alegre",
+    "dados": {
+      "idcidade": 20,
+      "uf": "RS"
+    }
+  },
+  {
+    "item": "Uruguaiana",
+    "dados": {
+      "idcidade": 35,
+      "uf": "RS"
+    }
+  },
+  {
+    "item": "Pelotas",
+    "dados": {
+      "idcidade": 12,
+      "uf": "RS"
+    }
+  },
+  {
+    "item": "Alegrete",
+    "dados": {
+      "idcidade": 100,
+      "uf": "RS"
+    }
+  },
+  {
+    "item": "Livramento",
+    "dados": {
+      "idcidade": 150,
+      "uf": "RS"
+    }
+  }
 ]
 ```
 
@@ -116,11 +135,25 @@ default: 'POST'
 options: String ('POST', 'GET')
 ```
 
+**timeout**
+Timeout para interromper a requisição
+```
+default: 10000
+options: Inteiro
+```
+
 **cache**
 Armanzenar retornos iguais no javascript
 ```
 default: false
 options: Boleano (true, false)
+```
+
+**intervalTimer**
+Tempo de espera do script para buscar os resultados após o usuário iniciar a digitação
+```
+default: 300
+options: Inteiro
 ```
 
 ###Retornos (Callbacks)
@@ -132,5 +165,5 @@ default: function(){}
 options: function(elemento, dados){ // seu código aqui }
 arguments:
   elemento: caixa de texto que o autocomplete foi chamado
-  dados: retorno do servidor em formato de array
+  dados: retorno do servidor em formato de objeto
 ```
