@@ -9,7 +9,7 @@
 	font-weight: normal;
 	font-style: normal;
 }
-[class^="fn_icon_"], [class*=" fn_icon_"] {
+[class^="icon-"], [class*=" icon-"] {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -20,10 +20,10 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-.fn_icon_spinner:before {
+.icon-spinner:before {
 	content: "\e97b";
 }
-.fn_icon_search:before {
+.icon-search:before {
 	content: "\e986";
 }
 
@@ -37,13 +37,10 @@
     -o-box-sizing		: border-box;
     box-sizing			: border-box;
 }
-.fn_autocomplete input {
-	width:100%;
-}
 .fn_autocomplete > ul {
 	display: none;
 	width:100%;
-	margin:0;
+	margin:0 0 30px 0;
 	padding:0;
 	list-style-type:none;
 	background: #FEFEFE;
@@ -69,7 +66,7 @@
 	cursor: pointer;
 	background: #B4D5FE;
 }
-.fn_autocomplete .fn_indicator {
+.fn_autocomplete .indicator {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -77,7 +74,7 @@
 	text-align: center;
 	vertical-align: middle;
 }
-.fn_autocomplete .fn_indicator span {
+.fn_autocomplete .indicator span {
 	width: inherit;
     height: inherit;
     display: table-cell;
@@ -86,11 +83,24 @@
 	font-size: 100%;
 	text-align: center;
 }
-.fn_autocomplete .fn_indicator span.fn_animated {
-	-webkit-animation: fn_loading 1s infinite linear;
-	animation: fn_loading 1s infinite linear;
+.fn_autocomplete .indicator.insert {
+	background-color: #60AA45;
+	border-radius: 4px;
+	cursor: pointer;
 }
-@-webkit-keyframes fn_loading {
+.fn_autocomplete .indicator.insert span {
+	color: #FFF;
+}
+.fn_autocomplete .indicator.insert:hover,
+.fn_autocomplete .indicator.insert:active {
+	background-color: #508C39;
+}
+
+.fn_autocomplete .indicator span.animated {
+	-webkit-animation: loading 1s infinite linear;
+	animation: loading 1s infinite linear;
+}
+@-webkit-keyframes loading {
 	0% {
 		-webkit-transform: rotate(0deg);
 		transform: rotate(0deg);
@@ -100,7 +110,7 @@
 		transform: rotate(360deg);
 	}
 }
-@keyframes fn_loading {
+@keyframes loading {
 	0% {
 		-webkit-transform: rotate(0deg);
 		transform: rotate(0deg);

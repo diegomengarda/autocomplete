@@ -9,36 +9,37 @@
 	'use strict';
 	
 	var defaults = {
-		'url' 				: '',	
-		'width' 			: 'auto',
-		'minChars' 			: 2,					
-		'maxHeight' 		: 200,
-		'params' 			: {},
-		'dataType' 			: 'json',
-		'zIndex' 			: 9999,
-		'type' 				: 'POST',
-		'timeout'       	: 10000,
-		'cache' 			: false,
-		'intervalTimer'		: 300, // tempo de intervalo ao digitar
+		'url' 			    : '',	
+		'width' 		    : 'auto',
+		'minChars' 		    : 2,					
+		'listMaxHeight' 	: 200,
+		'params' 		    : {},
+		'dataType' 		    : 'json',
+		'zIndex' 		    : 9999,
+		'type' 			    : 'POST',
+		'timeout'           : 10000,
+		'cache' 		    : false,
+		'debug' 		    : false,
 		
 		// CALLBACKS
-		onSelectItem: function() {} // function (elemento, data) {}		
+		onSelectItem: function() {} // function (elemento, data) {}
 	};
 	
     $.fn.autocomplete = function(options) {
 		
-		var countInstancias = this.length; // total de instÃ¢ncias do plugin		
+		var countInstancias = this.length; // total de instâncias do plugin		
 		if(countInstancias == 0) return this;
-		// suporte para multiplas instÃ¢ncias
+		// suporte para multiplas instâncias
 		if(countInstancias > 1){
-			this.each(function(){$(this).autocomplete(options)});
+		    this.each(function(){$(this).autocomplete(options)});
 			return this;
 		}
 		
 		var autocomplete 	    = {};   // cria uma variavel para ser usada no plugin		
 		var el 				    = this; // elemento instanciado
 		autocomplete.el 	    = this; // cria uma referência para o elemento instanciado para ser acessado dentro das funções
-		autocomplete.identTimer;		// identificador do timer
+		var identTimer;                 // identificador do timer
+        var intervaloTimer      = 200;  // tempo de intervalo ao digitar
 
 		autocomplete.keys = {
             ESC:    27,
@@ -53,22 +54,21 @@
 			autocomplete.offsetLeft 	= autocomplete.el.offset().left;
 			autocomplete.offsetBottom 	= autocomplete.el.outerHeight();
 			autocomplete.height 		= autocomplete.el.outerHeight();
-			autocomplete.width 			= (autocomplete.settings.width == 'auto' ? (autocomplete.el.outerWidth()+autocomplete.height) : autocomplete.settings.width);
+			autocomplete.width 			= (autocomplete.settings.width == 'auto' ? (autocomplete.el.outerWidth()+autocomplete.height) : autocomplete.settings.outerWidth)-10;
 			autocomplete.classref 		= 'class_'+Math.random().toString(36).slice(-8);			
 			autocomplete.indexSelected	= -1;
 			setup(); // executa todas modificações no DOM
 		}
 		
 		var setup = function(){
-			console.log(autocomplete.width);
 			autocomplete.el.attr('autocomplete', 'off');
 			autocomplete.el.addClass(autocomplete.classref);
 			autocomplete.el.wrap('<div class="fn_autocomplete '+autocomplete.classref+'" />');
 			autocomplete.el.css('padding-right', autocomplete.height);
 			autocomplete.bloco = $('div.'+autocomplete.classref);
 			autocomplete.bloco.width(autocomplete.width);
-			autocomplete.bloco.append('<div class="fn_indicator"><span class="fn_icon fn_icon_search"></span></div><ul></ul>');
-			autocomplete.indicator = autocomplete.bloco.find('.fn_indicator');
+			autocomplete.bloco.append('<div class="indicator"><span class="icon icon-search"></span></div><ul></ul>');
+			autocomplete.indicator = autocomplete.bloco.find('.indicator');
 			autocomplete.indicator.css({ 
 				'width': autocomplete.height+'px', 
 				'height': autocomplete.height+'px'
@@ -76,16 +76,21 @@
 			autocomplete.lista = autocomplete.bloco.find('ul');
 			autocomplete.countItens = -1;
 			autocomplete.lista.css({ 
-				'width': autocomplete.width, 
-				'maxHeight': autocomplete.settings.maxHeight,
+				'maxHeight': autocomplete.settings.listMaxHeight,
 				'top': autocomplete.offsetBottom,
 				'zIndex' : autocomplete.settings.zIndex
-			});			
+			});	
 			events();			
 		}
 		
 		var events = function() {			
-			autocomplete.el.on('keyup', function (event) { keyUp($(this), event); });
+			autocomplete.el.on('keyup', function (event) {
+			    var $this = $(this);
+			    clearTimeout(identTimer);
+                identTimer = setTimeout(function() {
+                    keyUp($this, event);
+                }, intervaloTimer);			    
+			});
 			autocomplete.el.on('keypress', function (event) { keyPress(event); });
 			autocomplete.el.on('keydown', function (event) { keyDown(event); });
 			autocomplete.lista.on('click', 'li', function () { selectItem($(this).index()); });            
@@ -105,11 +110,10 @@
 		}
 
 		var startLoader = function() {
-			autocomplete.indicator.find('span').removeClass('fn_icon_search').addClass('fn_icon_spinner fn_animated');
+			autocomplete.indicator.find('span').removeClass('icon-search').addClass('icon-spinner animated');
 		}
-
-		var stopLoader = function() {			
-			autocomplete.indicator.find('span').removeClass('fn_icon_spinner fn_animated').addClass('fn_icon_search');
+		var stopLoader = function() {
+		    autocomplete.indicator.find('span').removeClass('animated icon-spinner').addClass('icon-search');
 		}
 		
 		var keyUp = function(obj, e) {
@@ -142,9 +146,8 @@
                     break;
 
 				default:
-					if (obj.val().length >= autocomplete.settings.minChars) {
-						clearTimeout(autocomplete.identTimer);
-		                autocomplete.identTimer = setTimeout(ajaxRequest, autocomplete.settings.intervalTimer);
+					if (obj.val().length >= autocomplete.settings.minChars) {				
+						ajaxRequest();
 					} else {
 						cleanList();
 					}
@@ -172,17 +175,17 @@
 		var ajaxRequest = function() {
 			if (autocomplete.request) {
 				autocomplete.request.abort();
-				//cleanList();
+				cleanList();
 			}
 			startLoader();
-			autocomplete.settings.params.q = autocomplete.el.val(); // variavel 'q' = value do input
+			autocomplete.settings.params.q = autocomplete.el.val(); // variável 'q' = value do input
 			autocomplete.request = $.ajax({
 				type: autocomplete.settings.type,					
 				cache: autocomplete.settings.cache,
 				url: autocomplete.settings.url,
 				data: autocomplete.settings.params,
 				dataType: autocomplete.settings.dataType,
-				timeout: autocomplete.settings.timeout,
+				timeout: autocomplete.settings.timeout
 			}).done(function (data) {
 				autocomplete.request.abort();
 				if(JSON.stringify(data) != 'null' && JSON.stringify(data) != '[]' && JSON.stringify(data) != '') {
@@ -192,15 +195,17 @@
 			    stopLoader();
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 			    stopLoader();
-				console.log('Erro: '+textStatus);
+			    if(autocomplete.settings.debug) {
+					console.log('Erro: '+jqXHR.responseText);
+			    }
 			});
 		}
 
 		var selectItem = function(index) {
 			var obj = autocomplete.lista.find('li:eq('+index+')');
-			autocomplete.el.val(obj.text());			
+			autocomplete.el.val(obj.data('value'));
 			cleanList();
-			return autocomplete.settings.onSelectItem(autocomplete.el, obj.data('data'));
+			return autocomplete.settings.onSelectItem(autocomplete.el, obj.data('parameters'));
 		}
 
 		var setItemActive = function(index) {
@@ -213,15 +218,21 @@
 			cleanList();
 			setPositionList();
 			$.each(data,function(i, val){
-				var value = val['item'];
-				var datas = JSON.stringify(val['dados']);
-				autocomplete.lista.append('<li data-data=\''+datas+'\'>'+value+'</li>');
+				var value = val['value'];
+				var parameters = JSON.stringify(val['parameters']);
+				var resultado = value.toUpperCase();
+				var search = autocomplete.el.val().toUpperCase();
+				if(resultado.indexOf(search) != -1) {
+				    autocomplete.lista.append('<li data-value=\''+value+'\' data-parameters=\''+parameters+'\'>'+resultado.replace(search, "<u><strong>"+search+"</strong></u>")+'</li>');
+				} else {
+				    autocomplete.lista.append('<li data-value=\''+value+'\' data-parameters=\''+parameters+'\'>'+resultado.replace(/(<([^>]+)>)/ig,"")+'</li>');
+				}
 			});
 			autocomplete.lista.show();
 			autocomplete.countItens = autocomplete.lista.find('li').length;
 			setItemActive(0);
 		}
-
+        
 		$('html:not(.fn_autocomplete)').click(function(){
 			if($('.fn_autocomplete ul').is(':visible')){
 				$('.fn_autocomplete ul').hide();

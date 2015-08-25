@@ -1,4 +1,4 @@
-#Autocomplete 1.1
+#Autocomplete 1.2
 ##Plugin em jQuery de auto-sugestões para campos de texto
 
 ###Autor
@@ -32,9 +32,8 @@ Lançado sob a licença MIT - http://opensource.org/licenses/MIT
 $(function(){
 	$('.autocomplete').autocomplete({		
 		url : 'ajax.php',
-		onSelectItem : function(elemento, dados){
-		  	elemento.attr('data-idcidade', dados.idcidade);
-        elemento.attr('data-uf', dados.uf);
+		onSelectItem : function(el, parameters){
+		  	el.attr('data-code', parameters.code);
 		}		
 	});
 });
@@ -44,41 +43,48 @@ $(function(){
 
 ```javascript
 [
-  {
-    "item": "Porto Alegre",
-    "dados": {
-      "idcidade": 20,
-      "uf": "RS"
+    {
+        "value": "Blobfish",
+        "parameters":
+        {
+            "code": 12
+        }
+    },
+    {
+        "value": "Ajolote",
+        "parameters":
+        {
+            "code": 2
+        }
+    },
+    {
+        "value": "Lumpfish",
+        "parameters":
+        {
+            "code": 28
+        }
+    },
+    {
+        "value": "Tiburón Prehistórico",
+        "parameters":
+        {
+            "code": 32
+        }
+    },
+    {
+        "value": "Aye Aye",
+        "parameters":
+        {
+            "code": 46
+        }
+    },
+    {
+        "value": "Pulpo Dumbo",
+        "parameters":
+        {
+            "code": 17
+        }
     }
-  },
-  {
-    "item": "Uruguaiana",
-    "dados": {
-      "idcidade": 35,
-      "uf": "RS"
-    }
-  },
-  {
-    "item": "Pelotas",
-    "dados": {
-      "idcidade": 12,
-      "uf": "RS"
-    }
-  },
-  {
-    "item": "Alegrete",
-    "dados": {
-      "idcidade": 100,
-      "uf": "RS"
-    }
-  },
-  {
-    "item": "Livramento",
-    "dados": {
-      "idcidade": 150,
-      "uf": "RS"
-    }
-  }
 ]
 ```
 
@@ -107,7 +113,7 @@ default: 2
 options: Inteiro
 ```
 
-**maxHeight**
+**listMaxHeight**
 Height máximo da lista de sugestões
 ```
 default: 200
@@ -149,12 +155,13 @@ default: false
 options: Boleano (true, false)
 ```
 
-**intervalTimer**
-Tempo de espera do script para buscar os resultados após o usuário iniciar a digitação
+**debug**
+Ativar erros do request de pesquisa
 ```
-default: 300
-options: Inteiro
+default: false
+options: Boleano (true, false)
 ```
+
 
 ###Retornos (Callbacks)
 
@@ -162,8 +169,8 @@ options: Inteiro
 Ação ao selecionar um ítem da lista de sugestões
 ```
 default: function(){}
-options: function(elemento, dados){ // seu código aqui }
+options: function(el, parameters){ // seu código aqui }
 arguments:
-  elemento: caixa de texto que o autocomplete foi chamado
-  dados: retorno do servidor em formato de objeto
+  el: Elemento caixa de texto que o autocomplete foi chamado
+  parameters: parâmetros extras formato de objeto json
 ```

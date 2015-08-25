@@ -1,39 +1,41 @@
 <?php
-header('Content-Type: application/json');
-$retorno[] = array(
-    "item" => "Porto Alegre",
-    "dados" => array(
-        "idcidade" => 20,
-        "uf" => "RS"
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json; charset=utf-8');
+$return[] = array(
+    "value" => "Blobfish",
+    "parameters" => array(
+        "code" => 12
     )
 );
-$retorno[] = array(
-    "item" => "Uruguaiana",
-    "dados" => array(
-        "idcidade" => 35,
-        "uf" => "RS"
+$return[] = array(
+    "value" => "Ajolote",
+    "parameters" => array(
+        "code" => 2
     )
 );
-$retorno[] = array(
-    "item" => "Pelotas",
-    "dados" => array(
-        "idcidade" => 12,
-        "uf" => "RS"
+$return[] = array(
+    "value" => "Lumpfish",
+    "parameters" => array(
+        "code" => 28
     )
 );
-$retorno[] = array(
-    "item" => "Alegrete",
-    "dados" => array(
-        "idcidade" => 100,
-        "uf" => "RS"
+$return[] = array(
+    "value" => "Tiburón Prehistórico",
+    "parameters" => array(
+        "code" => 32
     )
 );
-$retorno[] = array(
-    "item" => "Livramento",
-    "dados" => array(
-        "idcidade" => 150,
-        "uf" => "RS"
+$return[] = array(
+    "value" => "Aye Aye",
+    "parameters" => array(
+        "code" => 46
     )
 );
-echo json_encode($retorno);
+$return[] = array(
+    "value" => "Pulpo Dumbo",
+    "parameters" => array(
+        "code" => 17
+    )
+);
+echo json_encode($return);
 ?>

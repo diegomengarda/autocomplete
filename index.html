@@ -22,16 +22,16 @@
 	<script>
 	$(function(){
 	    $('.autocomplete').autocomplete({       
-	        url : 'ajax.php',
-	        onSelectItem : function(elemento, dados){
-	            elemento.attr('data-idcidade', dados.idcidade);
-	            elemento.attr('data-uf', dados.uf);
+	        url : 'http://localhost/autocomplete/ajax.php',
+	        onSelectItem : function(el, parameters){
+	        	console.log(el); // element
+	        	console.log(parameters); // extra parameters
 	        }       
 	    });
 	});
 	</script>
 </head>
 <body>
-	<input type="text" class="autocomplete" name="cidade">
+	<input type="text" class="autocomplete">
 </body>
 </html>
